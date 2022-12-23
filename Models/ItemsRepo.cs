@@ -14,7 +14,11 @@ namespace API.Models
 
         public async Task<Item> AddItem(Item item)
         {
-            item.Category.CategoryID = item.CategoryID;
+            if (item.Category != null)
+            {
+                item.Category.CategoryID = item.CategoryID;
+                appDBcontext.Entry(item.Category).State = EntityState.Unchanged;
+            }
             var res = await appDBcontext.Items.AddAsync(item);
             await appDBcontext.SaveChangesAsync();
             return res.Entity;
